@@ -47,10 +47,10 @@ public class CompanyRecordsController : ControllerBase
         return Ok(result);
     }
 
-    [HttpPut]
-    public async Task<IActionResult> UpdateCompanyRecord([FromBody] UpdateCompanyRecordRequest request)
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateCompanyRecord([FromRoute] long id, [FromBody] UpdateCompanyRecordRequest request)
     {
-        var command = new UpdateCompanyRecordCommand(request.Id, request.Name, request.StockTicker, request.Exchange, request.ISIN, request.Website);
+        var command = new UpdateCompanyRecordCommand(id, request.Name, request.StockTicker, request.Exchange, request.ISIN, request.Website);
         await _mediator.Send(command);
         return NoContent();
     }

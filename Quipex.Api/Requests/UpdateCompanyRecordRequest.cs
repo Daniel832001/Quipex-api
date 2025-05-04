@@ -2,7 +2,6 @@
 
 public class UpdateCompanyRecordRequest
 {
-    public long Id { get; set; }
     public string Name { get; set; }
     public string StockTicker { get; set; }
     public string Exchange { get; set; }
