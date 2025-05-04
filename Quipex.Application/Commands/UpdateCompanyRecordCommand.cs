@@ -2,10 +2,11 @@
 
 namespace Quipex.Application.Commands;
 
-public class CreateCompanyRecordCommand : IRequest<Unit>
+public class UpdateCompanyRecordCommand : IRequest<Unit>
 {
-    public CreateCompanyRecordCommand(string name, string stockTicker, string exchange, string Isin, string? website)
+    public UpdateCompanyRecordCommand(long id, string name, string stockTicker, string exchange, string Isin, string? website)
     {
+        Id = id;
         Name = name;
         StockTicker = stockTicker;
         Exchange = exchange;
@@ -13,6 +14,7 @@ public class CreateCompanyRecordCommand : IRequest<Unit>
         Website = website;
     }
 
+    public long Id { get; set; }
     public string Name { get; set; }
     public string StockTicker { get; set; }
     public string Exchange { get; set; }

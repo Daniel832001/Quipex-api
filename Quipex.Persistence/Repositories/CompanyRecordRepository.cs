@@ -40,4 +40,34 @@ public class CompanyRecordRepository : ICompanyRecordRepository
             throw new Exception("Unexpected error while saving.");
         }
     }
+
+    public async Task UpdateAsync(long id, string name, string stockTicker, string exchange, string isin, string? website)
+    {
+        var toBeUpdatedCompanyRecord = await _context.CompanyRecords.FindAsync(id);
+        if (toBeUpdatedCompanyRecord == null)
+        {
+            throw new CompanyRecordNotFoundException(id);
+        }
+
+        toBeUpdatedCompanyRecord.Update(name, stockTicker, exchange, isin, website);
+
+        try
+        {
+            var numRowsAffected = await _context.SaveChangesAsync();
+            if (numRowsAffected != 1)
+            {
+                throw new Exception("Update failed. No rows affected.");
+            }
+        }
+        catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlEx && (sqlEx.Number == 2627 || sqlEx.Number == 2601))
+        {
+            throw new DuplicateISINException(isin);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("Unexpected error while saving.");
+        }
+
+    }
+
 }

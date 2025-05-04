@@ -1,4 +1,5 @@
 ﻿
+using System.Data;
 using Quipex.Domain.Exceptions;
 
 namespace Quipex.Domain.Entities;
@@ -8,18 +9,14 @@ public class CompanyRecord
     // for ef
     private CompanyRecord() { }
 
-    public CompanyRecord(string name, string stockTicker, string exchange, string Isin, string? website)
+    public CompanyRecord(string name, string stockTicker, string exchange, string isin, string? website)
     {
-        if (string.IsNullOrWhiteSpace(Isin) || Isin.Length != 12 || char.IsDigit(Isin[0]) || char.IsDigit(Isin[1]))
-        {
-            throw new InvalidCompanyRecordISINException(Isin);
-        }
-
+        validateISIN(isin);
         Id = 0;
         Name = name;
         StockTicker = stockTicker;
         Exchange = exchange;
-        ISIN = Isin;
+        ISIN = isin;
         Website = website;
     }
 
@@ -29,4 +26,22 @@ public class CompanyRecord
     public string Exchange { get; set; }
     public string ISIN { get; set; }
     public string? Website { get; set; }
+
+    public void Update(string name, string stockTicker, string exchange, string isin, string? website)
+    {
+        validateISIN(isin);
+        Name = name;
+        StockTicker = stockTicker;
+        Exchange = exchange;
+        ISIN = isin;
+        Website = website;
+    }
+
+    private void validateISIN(string isin)
+    {
+        if (string.IsNullOrWhiteSpace(isin) || isin.Length != 12 || char.IsDigit(isin[0]) || char.IsDigit(isin[1]))
+        {
+            throw new InvalidCompanyRecordISINException(isin);
+        }
+    }
 }

@@ -14,11 +14,6 @@ public class CompanyRecordQueryDataStore : ICompanyRecordQueryDataStore
         _context = context;
     }
 
-    public async Task<IEnumerable<CompanyRecord>> GetAllAsync()
-    {
-        return await _context.CompanyRecords.AsNoTracking().ToListAsync();
-    }
-
     public async Task<CompanyRecord> GetCompanyRecordByIdAsync(long id)
     {
         var result = await _context.CompanyRecords.AsNoTracking().SingleOrDefaultAsync(r => r.Id == id);
@@ -28,4 +23,7 @@ public class CompanyRecordQueryDataStore : ICompanyRecordQueryDataStore
 
         return result;
     }
+
+    public async Task<IEnumerable<CompanyRecord>> GetCompanyRecordsAsync() =>
+        await _context.CompanyRecords.AsNoTracking().ToListAsync();
 }

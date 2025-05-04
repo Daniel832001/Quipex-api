@@ -5,6 +5,7 @@ using Quipex.Api.Requests;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using Quipex.Application.Queries;
 using Quipex.Application.DTOs;
+using Azure.Core;
 
 namespace Quipex.Api.Controllers;
 
@@ -38,13 +39,19 @@ public class CompanyRecordsController : ControllerBase
         return Ok(result);
     }
 
-    //[HttpGet]
-    //public async Task<ActionResult<IEnumerable<CompanyRecordViewModel>> GetCompanyRecords()
-    //{
-    //}
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<CompanyRecordDto>>> GetCompanyRecords()
+    {
+        var query = new GetCompanyRecordsQuery();
+        var result = await _mediator.Send(query);
+        return Ok(result);
+    }
 
-    //[HttpPut]
-    //public async Task<IActionResult> UpdateCompanyRecord([FromBody] CompanyRecordModel model)
-    //{
-    //}
+    [HttpPut]
+    public async Task<IActionResult> UpdateCompanyRecord([FromBody] UpdateCompanyRecordRequest request)
+    {
+        var command = new UpdateCompanyRecordCommand(request.Id, request.Name, request.StockTicker, request.Exchange, request.ISIN, request.Website);
+        await _mediator.Send(command);
+        return NoContent();
+    }
 }
